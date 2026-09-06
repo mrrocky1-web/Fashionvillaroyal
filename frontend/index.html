@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fashionvillaroyal | Premium Fashion & Ethnic Collection</title>
+  <meta name="description" content="Fashionvillaroyal - Shop premium sarees, kurtis, suits, and trendy fashion online or directly on Meesho & Flipkart.">
+  <!-- Google Fonts & Font Awesome Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Top Announcement Bar (Configurable from Admin CMS) -->
+  <div class="announcement-bar" id="announcementBar">
+    <div class="container announcement-content">
+      <span id="announcementText"><i class="fa-solid fa-store"></i> We are available in Meesho, Flipkart, Amazon etc.</span>
+      <div class="announcement-links">
+        <a href="mailto:fhub0021@gmail.com"><i class="fa-solid fa-envelope"></i> fhub0021@gmail.com</a>
+        <a href="#supportModal" onclick="openModal('supportModal')"><i class="fa-solid fa-headset"></i> Customer Support</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header Navigation -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <a href="#" class="brand-logo">
+        <span class="logo-icon"><i class="fa-solid fa-crown"></i></span>
+        <span class="logo-text">Fashionvillaroyal</span>
+      </a>
+
+      <!-- Search Bar -->
+      <div class="nav-search">
+        <input type="text" id="searchInput" placeholder="Search catalog, kurties, sarees, brands...">
+        <button id="searchBtn"><i class="fa-solid fa-magnifying-glass"></i></button>
+      </div>
+
+      <!-- Navigation Actions -->
+      <div class="nav-actions">
+        <button class="nav-link-btn" onclick="filterCategory('All')"><i class="fa-solid fa-house"></i> Home</button>
+        <button class="nav-link-btn" onclick="scrollToSection('catalogSection')"><i class="fa-solid fa-bag-shopping"></i> Shop</button>
+        <button class="nav-link-btn" onclick="openModal('supportModal')"><i class="fa-solid fa-headset"></i> Support</button>
+
+        <!-- Dedicated Seller Hub Button (Visible to Sellers & Admin) -->
+        <button class="nav-link-btn hidden text-pink" id="navSellerBtn" onclick="openModal('sellerModal')">
+          <i class="fa-solid fa-store"></i> Seller Hub & Upload
+        </button>
+        
+        <!-- Cart Button with Counter Badge -->
+        <button class="nav-link-btn cart-btn" id="openCartBtn" onclick="toggleCartDrawer()">
+          <i class="fa-solid fa-cart-shopping"></i>
+          <span class="cart-badge" id="cartCountBadge">0</span>
+        </button>
+
+        <!-- User Account Menu / Auth Button -->
+        <div class="user-menu-container" id="userMenuContainer">
+          <button class="nav-link-btn auth-trigger-btn" id="authBtn" onclick="openModal('authModal')">
+            <i class="fa-solid fa-user"></i> <span id="authBtnText">Login</span>
+          </button>
+          <div class="user-dropdown hidden" id="userDropdown">
+            <div class="dropdown-header" id="dropdownUserName">Guest User</div>
+            <div class="dropdown-role" id="dropdownUserRole">Customer</div>
+            <hr>
+            <button onclick="openModal('changePasswordModal')"><i class="fa-solid fa-key"></i> Change Password</button>
+            <button id="sellerPanelLink" class="hidden text-pink" onclick="openModal('sellerModal')"><i class="fa-solid fa-store"></i> Seller Hub & Catalog</button>
+            <button id="adminPanelLink" class="hidden" onclick="openModal('adminModal')"><i class="fa-solid fa-sliders"></i> Admin CMS & Dashboard</button>
+            <hr>
+            <button class="logout-btn" onclick="handleLogout()"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Slideshow Carousel (Editable via Admin Panel) -->
+  <section class="hero-carousel-section">
+    <div class="carousel-container" id="carouselContainer">
+      <!-- Slides rendered dynamically by JavaScript -->
+    </div>
+    <button class="carousel-prev" onclick="prevSlide()"><i class="fa-solid fa-chevron-left"></i></button>
+    <button class="carousel-next" onclick="nextSlide()"><i class="fa-solid fa-chevron-right"></i></button>
+    <div class="carousel-dots" id="carouselDots"></div>
+  </section>
+
+  <!-- Marketplace Trust Banner -->
+  <section class="trust-banner">
+    <div class="container trust-flex">
+      <div class="trust-item">
+        <i class="fa-solid fa-truck-fast"></i>
+        <div>
+          <h4>Express Fast Delivery</h4>
+          <p>Pan-India shipping with tracking</p>
+        </div>
+      </div>
+      <div class="trust-item">
+        <i class="fa-solid fa-shield-halved"></i>
+        <div>
+          <h4>Verified Seller Products</h4>
+          <p>Verified quality like Meesho & Flipkart</p>
+        </div>
+      </div>
+      <div class="trust-item">
+        <i class="fa-solid fa-arrow-rotate-left"></i>
+        <div>
+          <h4>Easy Returns & Refund</h4>
+          <p>7 Days hassle-free return guarantee</p>
+        </div>
+      </div>
+      <div class="trust-item">
+        <i class="fa-solid fa-envelope-circle-check"></i>
+        <div>
+          <h4>24/7 Dedicated Support</h4>
+          <p>Direct mail to fhub0021@gmail.com</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Special Offer Banners Section (Editable from Admin CMS) -->
+  <section class="container offers-section">
+    <div class="offers-grid" id="offersGrid">
+      <!-- Offer Cards rendered dynamically -->
+    </div>
+  </section>
+
+  <!-- Product Catalog Section -->
+  <main class="container catalog-section" id="catalogSection">
+    
+    <!-- Filter Header -->
+    <div class="catalog-header">
+      <div class="catalog-title">
+        <h2>Explore Trending Collections</h2>
+        <p>Buy directly from Fashionvillaroyal or shop on Meesho & Flipkart!</p>
+      </div>
+      
+      <!-- Category Filter Pills -->
+      <div class="category-pills" id="categoryPills">
+        <button class="cat-pill active" onclick="filterCategory('All')">All Products</button>
+        <button class="cat-pill" onclick="filterCategory('Sarees')">Sarees</button>
+        <button class="cat-pill" onclick="filterCategory('Kurti Sets')">Kurti Sets</button>
+        <button class="cat-pill" onclick="filterCategory('Lehengas')">Lehengas</button>
+        <button class="cat-pill" onclick="filterCategory('Western')">Western Wear</button>
+        <button class="cat-pill" onclick="filterCategory('Jewelry')">Jewelry & Accessories</button>
+      </div>
+    </div>
+
+    <!-- Product Grid -->
+    <div class="product-grid" id="productGrid">
+      <!-- Product cards generated by app.js -->
+    </div>
+  </main>
+
+  <!-- Customer Support Modal -->
+  <div class="modal-overlay hidden" id="supportModal">
+    <div class="modal-card">
+      <button class="modal-close" onclick="closeModal('supportModal')">&times;</button>
+      <div class="modal-header">
+        <i class="fa-solid fa-headset modal-icon"></i>
+        <h3>Customer Support & Inquiry</h3>
+        <p>Direct assistance for customers & sellers</p>
+      </div>
+      <div class="support-direct-box">
+        <p><i class="fa-solid fa-envelope"></i> Direct Email: <strong id="supportEmailDisplay">fhub0021@gmail.com</strong></p>
+        <p><i class="fa-solid fa-clock"></i> Support Hours: Mon - Sat (9:00 AM - 8:00 PM)</p>
+      </div>
+      <form id="contactForm" onsubmit="handleContactSubmit(event)">
+        <div class="form-group">
+          <label>Your Name *</label>
+          <input type="text" id="contactName" required placeholder="Enter your full name">
+        </div>
+        <div class="form-group">
+          <label>Your Email *</label>
+          <input type="email" id="contactEmail" required placeholder="name@example.com">
+        </div>
+        <div class="form-group">
+          <label>Mobile Number</label>
+          <input type="tel" id="contactPhone" placeholder="10-digit mobile number">
+        </div>
+        <div class="form-group">
+          <label>Subject</label>
+          <input type="text" id="contactSubject" placeholder="Order status, product inquiry, return...">
+        </div>
+        <div class="form-group">
+          <label>Your Message *</label>
+          <textarea id="contactMessage" rows="4" required placeholder="Write your question or request here..."></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block"><i class="fa-solid fa-paper-plane"></i> Send Message to Support</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Cart Drawer Overlay -->
+  <div class="cart-drawer-overlay hidden" id="cartDrawerOverlay" onclick="toggleCartDrawer()"></div>
+  <aside class="cart-drawer hidden" id="cartDrawer">
+    <div class="cart-drawer-header">
+      <h3><i class="fa-solid fa-bag-shopping"></i> Shopping Cart (<span id="cartDrawerCount">0</span>)</h3>
+      <button class="drawer-close-btn" onclick="toggleCartDrawer()">&times;</button>
+    </div>
+    <div class="cart-drawer-body" id="cartDrawerBody">
+      <!-- Cart items injected here -->
+    </div>
+    <div class="cart-drawer-footer" id="cartDrawerFooter">
+      <div class="cart-summary-line">
+        <span>Subtotal</span>
+        <span class="cart-subtotal-val" id="cartSubtotal">₹0</span>
+      </div>
+      <div class="cart-summary-line">
+        <span>Delivery Charge</span>
+        <span class="free-text">FREE</span>
+      </div>
+      <div class="cart-summary-line total-line">
+        <span>Grand Total</span>
+        <span class="cart-total-val" id="cartGrandTotal">₹0</span>
+      </div>
+      <button class="btn btn-success btn-block" onclick="openCheckoutModal()"><i class="fa-solid fa-lock"></i> Proceed to Checkout</button>
+    </div>
+  </aside>
+
+  <!-- Checkout & Contact Details Modal (Bug-Free Form Validation) -->
+  <div class="modal-overlay hidden" id="checkoutModal">
+    <div class="modal-card modal-lg">
+      <button class="modal-close" onclick="closeModal('checkoutModal')">&times;</button>
+      <div class="modal-header">
+        <i class="fa-solid fa-truck-ramp-box modal-icon"></i>
+        <h3>Shipping & Contact Details</h3>
+        <p>Fill out contact information accurately for order confirmation</p>
+      </div>
+
+      <div class="checkout-grid">
+        <form id="checkoutForm" onsubmit="handlePlaceOrder(event)">
+          <h4 class="form-section-title"><i class="fa-solid fa-user-check"></i> Customer Contact Info</h4>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Full Name *</label>
+              <input type="text" id="shipFullName" required placeholder="e.g. Ananya Sharma">
+            </div>
+            <div class="form-group">
+              <label>Mobile Number *</label>
+              <input type="tel" id="shipPhone" required placeholder="10-digit mobile number" pattern="[0-9]{10}">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Email Address *</label>
+            <input type="email" id="shipEmail" required placeholder="e.g. user@gmail.com">
+          </div>
+
+          <h4 class="form-section-title"><i class="fa-solid fa-location-dot"></i> Delivery Address</h4>
+          <div class="form-group">
+            <label>Street Address / House No / Area *</label>
+            <input type="text" id="shipAddress" required placeholder="Flat no., Street, Colony, Landmark">
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>City *</label>
+              <input type="text" id="shipCity" required placeholder="City">
+            </div>
+            <div class="form-group">
+              <label>Pincode *</label>
+              <input type="text" id="shipPincode" required placeholder="6-digit pincode" pattern="[0-9]{6}">
+            </div>
+          </div>
+
+          <h4 class="form-section-title"><i class="fa-solid fa-credit-card"></i> Payment Method</h4>
+          <div class="payment-options">
+            <label class="radio-card">
+              <input type="radio" name="paymentMethod" value="COD" checked>
+              <span><i class="fa-solid fa-money-bill-wave"></i> Cash on Delivery (COD)</span>
+            </label>
+            <label class="radio-card">
+              <input type="radio" name="paymentMethod" value="UPI">
+              <span><i class="fa-solid fa-qrcode"></i> Google Pay / PhonePe / UPI</span>
+            </label>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block btn-lg" id="placeOrderBtn">
+            <i class="fa-solid fa-circle-check"></i> Confirm & Place Order
+          </button>
+        </form>
+
+        <div class="checkout-summary-box">
+          <h4>Order Summary</h4>
+          <div id="checkoutItemsList" class="checkout-items-mini"></div>
+          <hr>
+          <div class="cart-summary-line total-line">
+            <span>Total Payable:</span>
+            <strong id="checkoutTotalAmount">₹0</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Product Detail Modal (Shows Buy on Meesho & Buy on Flipkart) -->
+  <div class="modal-overlay hidden" id="productDetailModal">
+    <div class="modal-card modal-lg">
+      <button class="modal-close" onclick="closeModal('productDetailModal')">&times;</button>
+      <div class="product-detail-layout" id="productDetailLayout">
+        <!-- Content rendered dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- User Authentication Modal (Login / Register / Forgot Password) -->
+  <div class="modal-overlay hidden" id="authModal">
+    <div class="modal-card">
+      <button class="modal-close" onclick="closeModal('authModal')">&times;</button>
+      
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="tabLogin" onclick="switchAuthTab('login')">Login</button>
+        <button class="auth-tab" id="tabRegister" onclick="switchAuthTab('register')">Register Account</button>
+      </div>
+
+      <!-- LOGIN FORM -->
+      <form id="loginForm" class="auth-form" onsubmit="handleLoginSubmit(event)">
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" id="loginEmail" required placeholder="Enter your email">
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="loginPassword" required placeholder="Enter password">
+        </div>
+        <div class="forgot-link-wrap">
+          <a href="#" onclick="showForgotPasswordView()">Forgot Password?</a>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Login to Fashionvillaroyal</button>
+      </form>
+
+      <!-- REGISTER FORM -->
+      <form id="registerForm" class="auth-form hidden" onsubmit="handleRegisterSubmit(event)">
+        <div class="form-group">
+          <label>Account Type *</label>
+          <select id="regRole" onchange="toggleStoreNameInput()">
+            <option value="customer">Customer (Buyer)</option>
+            <option value="seller" selected>Seller / Supplier (Catalog Upload)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Full Name *</label>
+          <input type="text" id="regName" required placeholder="Your full name">
+        </div>
+        <div class="form-group" id="storeNameGroup">
+          <label>Store / Brand Name *</label>
+          <input type="text" id="regStoreName" placeholder="e.g. Royal Fashion Hub">
+        </div>
+        <div class="form-group">
+          <label>Email Address *</label>
+          <input type="email" id="regEmail" required placeholder="name@example.com">
+        </div>
+        <div class="form-group">
+          <label>Mobile Number</label>
+          <input type="tel" id="regPhone" placeholder="10-digit mobile number">
+        </div>
+        <div class="form-group">
+          <label>Password *</label>
+          <input type="password" id="regPassword" required placeholder="Min. 6 characters">
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Create Seller / Customer Account</button>
+      </form>
+
+      <!-- FORGOT PASSWORD & OTP FORM -->
+      <div id="forgotPasswordView" class="auth-form hidden">
+        <h4 class="otp-title"><i class="fa-solid fa-key"></i> Forgot Password (OTP Verification)</h4>
+        
+        <!-- STEP 1: Request OTP -->
+        <div id="otpStep1">
+          <p class="small-desc">Enter your registered email or mobile number to receive a 6-digit verification code.</p>
+          <div class="form-group">
+            <label>Registered Email or Mobile</label>
+            <input type="text" id="otpTargetInput" placeholder="Email or 10-digit mobile number">
+          </div>
+          <button type="button" class="btn btn-primary btn-block" onclick="handleSendOTP()"><i class="fa-solid fa-paper-plane"></i> Send OTP Code</button>
+        </div>
+
+        <!-- STEP 2: Verify OTP & New Password -->
+        <div id="otpStep2" class="hidden">
+          <p class="small-desc">Enter the 6-digit OTP code sent to your email/mobile and set a new password.</p>
+          <div class="form-group">
+            <label>Enter 6-Digit OTP *</label>
+            <input type="text" id="otpCodeInput" maxlength="6" placeholder="e.g. 123456" class="otp-input-field">
+          </div>
+          <div class="form-group">
+            <label>New Password *</label>
+            <input type="password" id="otpNewPasswordInput" placeholder="Min 6 characters">
+          </div>
+          <button type="button" class="btn btn-success btn-block" onclick="handleVerifyOTPAndReset()"><i class="fa-solid fa-check"></i> Reset & Save Password</button>
+        </div>
+
+        <button type="button" class="btn-link" onclick="hideForgotPasswordView()">&larr; Back to Login</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Change Password Modal -->
+  <div class="modal-overlay hidden" id="changePasswordModal">
+    <div class="modal-card">
+      <button class="modal-close" onclick="closeModal('changePasswordModal')">&times;</button>
+      <div class="modal-header">
+        <i class="fa-solid fa-lock-open modal-icon"></i>
+        <h3>Change Account Password</h3>
+      </div>
+      <form id="changePasswordForm" onsubmit="handleChangePasswordSubmit(event)">
+        <div class="form-group">
+          <label>Current Password *</label>
+          <input type="password" id="currPassword" required placeholder="Enter current password">
+        </div>
+        <div class="form-group">
+          <label>New Password *</label>
+          <input type="password" id="newPassword" required placeholder="Enter new password (min. 6 chars)">
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Update Password</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Seller Hub & Catalog Upload Modal (Complete Selling Interface) -->
+  <div class="modal-overlay hidden" id="sellerModal">
+    <div class="modal-card modal-xl">
+      <button class="modal-close" onclick="closeModal('sellerModal')">&times;</button>
+      <div class="modal-header">
+        <i class="fa-solid fa-store modal-icon text-pink"></i>
+        <h3>Fashionvillaroyal Seller Hub & Catalog Panel</h3>
+        <p>List new products, add Meesho & Flipkart direct buying links, and manage catalog</p>
+      </div>
+
+      <!-- Seller Sub-Tabs -->
+      <div class="admin-tabs">
+        <button class="admin-tab active" id="sellerTabAdd" onclick="switchSellerTab('add')"><i class="fa-solid fa-cloud-arrow-up"></i> Add New Product</button>
+        <button class="admin-tab" id="sellerTabList" onclick="switchSellerTab('list')"><i class="fa-solid fa-boxes-stacked"></i> My Listed Catalog</button>
+      </div>
+      
+      <!-- TAB 1: ADD PRODUCT FORM -->
+      <div id="sellerAddView">
+        <form id="sellerAddProductForm" onsubmit="handleCreateProduct(event)">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Product Title *</label>
+              <input type="text" id="prodTitle" required placeholder="e.g. Royal Designer Embroidered Saree">
+            </div>
+            <div class="form-group">
+              <label>Category *</label>
+              <select id="prodCategory" required>
+                <option value="Sarees">Sarees</option>
+                <option value="Kurti Sets">Kurti Sets</option>
+                <option value="Lehengas">Lehengas</option>
+                <option value="Western">Western Wear</option>
+                <option value="Jewelry">Jewelry & Accessories</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Selling Price (₹) *</label>
+              <input type="number" id="prodPrice" required placeholder="e.g. 799" min="1">
+            </div>
+            <div class="form-group">
+              <label>Original MRP (₹)</label>
+              <input type="number" id="prodOriginalPrice" placeholder="e.g. 1999">
+            </div>
+          </div>
+
+          <!-- Meesho & Flipkart Direct Buy Links -->
+          <div class="form-row">
+            <div class="form-group">
+              <label><i class="fa-solid fa-link text-pink"></i> Meesho Product Link (Optional)</label>
+              <input type="url" id="prodMeeshoUrl" placeholder="https://www.meesho.com/s/p/12345">
+            </div>
+            <div class="form-group">
+              <label><i class="fa-solid fa-link text-blue"></i> Flipkart Product Link (Optional)</label>
+              <input type="url" id="prodFlipkartUrl" placeholder="https://www.flipkart.com/dp/12345">
+            </div>
+          </div>
+
+          <!-- Catalog Photo Upload with Undo Option -->
+          <div class="form-group">
+            <label>Product Photo *</label>
+            <div class="photo-upload-container">
+              <input type="text" id="prodImageUrl" placeholder="Enter image URL or select file upload below..." oninput="previewUploadPhoto()">
+              <div class="file-drop-box">
+                <input type="file" id="prodImageFile" accept="image/*" onchange="handlePhotoFileSelect(event)">
+                <p><i class="fa-solid fa-image"></i> Click to select product image file from device</p>
+              </div>
+              
+              <!-- Photo Preview & Undo Option Container -->
+              <div class="photo-preview-wrap hidden" id="photoPreviewWrap">
+                <img src="" id="photoPreviewImg" alt="Product Preview">
+                <div class="preview-actions">
+                  <span class="preview-label">Selected Photo Preview</span>
+                  <button type="button" class="btn-undo-photo" onclick="undoPhotoSelection()">
+                    <i class="fa-solid fa-rotate-left"></i> Undo Photo Selection
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Product Description *</label>
+            <textarea id="prodDescription" rows="4" required placeholder="Fabric quality, sizing details, care instructions..."></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block btn-lg"><i class="fa-solid fa-circle-plus"></i> Publish Catalog Product to Store</button>
+        </form>
+      </div>
+
+      <!-- TAB 2: MY LISTED CATALOG INVENTORY -->
+      <div id="sellerListView" class="hidden">
+        <div class="table-responsive">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Image</th>
+                <th>Title</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Meesho / Flipkart Links</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="sellerProductsTableBody">
+              <!-- Rendered dynamically by app.js -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Full Site Admin CMS & Dashboard Modal -->
+  <div class="modal-overlay hidden" id="adminModal">
+    <div class="modal-card modal-xl">
+      <button class="modal-close" onclick="closeModal('adminModal')">&times;</button>
+      
+      <div class="admin-header">
+        <h2><i class="fa-solid fa-shield-halved"></i> Fashionvillaroyal Super Admin Control Panel</h2>
+        <p>Complete control over catalog, homepage slides, offer banners, and store orders</p>
+      </div>
+
+      <!-- Admin Tabs -->
+      <div class="admin-tabs">
+        <button class="admin-tab active" id="admTabStats" onclick="switchAdminTab('stats')"><i class="fa-solid fa-chart-line"></i> Dashboard Stats</button>
+        <button class="admin-tab" id="admTabProducts" onclick="switchAdminTab('products')"><i class="fa-solid fa-boxes-stacked"></i> Products Catalog</button>
+        <button class="admin-tab" id="admTabOrders" onclick="switchAdminTab('orders')"><i class="fa-solid fa-truck"></i> Incoming Orders</button>
+        <button class="admin-tab" id="admTabCMS" onclick="switchAdminTab('cms')"><i class="fa-solid fa-pen-to-square"></i> Homepage Slideshow & Banner CMS</button>
+      </div>
+
+      <!-- ADMIN TAB 1: OVERVIEW STATS -->
+      <div id="adminStatsView" class="admin-tab-content">
+        <div class="admin-stats-grid">
+          <div class="stat-card">
+            <i class="fa-solid fa-layer-group stat-icon text-purple"></i>
+            <div>
+              <h3 id="statTotalProducts">0</h3>
+              <p>Total Listed Products</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <i class="fa-solid fa-cart-check stat-icon text-green"></i>
+            <div>
+              <h3 id="statTotalOrders">0</h3>
+              <p>Total Orders Placed</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <i class="fa-solid fa-indian-rupee-sign stat-icon text-gold"></i>
+            <div>
+              <h3 id="statTotalRevenue">₹0</h3>
+              <p>Total Revenue</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ADMIN TAB 2: PRODUCTS CATALOG -->
+      <div id="adminProductsView" class="admin-tab-content hidden">
+        <div class="admin-action-bar">
+          <h3>Catalog Inventory</h3>
+          <button class="btn btn-primary" onclick="openModal('sellerModal')"><i class="fa-solid fa-plus"></i> Add New Product</button>
+        </div>
+        <div class="table-responsive">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Image</th>
+                <th>Title</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Meesho / Flipkart Link</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="adminProductsTableBody">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ADMIN TAB 3: INCOMING ORDERS -->
+      <div id="adminOrdersView" class="admin-tab-content hidden">
+        <h3>Customer Incoming Orders</h3>
+        <div class="table-responsive">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Order ID</th>
+                <th>Customer</th>
+                <th>Contact Phone</th>
+                <th>Address</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="adminOrdersTableBody">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ADMIN TAB 4: HOMEPAGE CMS (CAROUSEL & ANNOUNCEMENT BANNERS) -->
+      <div id="adminCMSView" class="admin-tab-content hidden">
+        <form id="adminCMSForm" onsubmit="handleSaveCMS(event)">
+          <div class="form-group">
+            <label>Top Announcement Bar Text *</label>
+            <input type="text" id="cmsAnnouncementText" required placeholder="e.g. We are available in Meesho, Flipkart, Amazon etc.">
+          </div>
+
+          <div class="form-group">
+            <label>Support Email Address *</label>
+            <input type="email" id="cmsSupportEmail" required placeholder="fhub0021@gmail.com">
+          </div>
+
+          <hr class="my-4">
+          <h4 class="form-section-title"><i class="fa-solid fa-images"></i> Manage Front Page Slideshow Carousel</h4>
+          
+          <div id="cmsSlidesContainer">
+            <!-- Dynamic Slide Input Blocks -->
+          </div>
+
+          <button type="button" class="btn btn-secondary" onclick="addCMSSlideInput()"><i class="fa-solid fa-plus"></i> Add New Carousel Slide</button>
+
+          <hr class="my-4">
+          <button type="submit" class="btn btn-success btn-lg btn-block"><i class="fa-solid fa-floppy-disk"></i> Save & Publish Front Page Changes</button>
+        </form>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Toast Notification System -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-grid">
+      <div class="footer-col">
+        <a href="#" class="brand-logo footer-logo">
+          <span class="logo-icon"><i class="fa-solid fa-crown"></i></span>
+          <span class="logo-text">Fashionvillaroyal</span>
+        </a>
+        <p>Fashionvillaroyal is your premier destination for ethnic wear, designer sarees, kurtis, and contemporary fashion. Also available on Meesho and Flipkart.</p>
+        <p class="trust-badge-tag"><i class="fa-solid fa-award"></i> Verified Manufacturer Direct Outlet</p>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="#" onclick="filterCategory('All')">Home Storefront</a></li>
+          <li><a href="#catalogSection">Browse Catalog</a></li>
+          <li><a href="#" onclick="openModal('supportModal')">Customer Support</a></li>
+          <li><a href="#" onclick="openModal('authModal')">Account Login</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Categories</h4>
+        <ul>
+          <li><a href="#" onclick="filterCategory('Sarees')">Designer Sarees</a></li>
+          <li><a href="#" onclick="filterCategory('Kurti Sets')">Kurti & Suit Sets</a></li>
+          <li><a href="#" onclick="filterCategory('Lehengas')">Bridal Lehengas</a></li>
+          <li><a href="#" onclick="filterCategory('Western')">Western Outfits</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Direct Contact</h4>
+        <p><i class="fa-solid fa-envelope"></i> Email: <a href="mailto:fhub0021@gmail.com">fhub0021@gmail.com</a></p>
+        <p><i class="fa-solid fa-clock"></i> Support: Mon-Sat 9AM - 8PM</p>
+        <p><i class="fa-solid fa-location-dot"></i> Surat & Jaipur Wholesale Hub, India</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container">
+        <p>&copy; 2026 Fashionvillaroyal. All rights reserved. Built for Render & Vercel deployment.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
