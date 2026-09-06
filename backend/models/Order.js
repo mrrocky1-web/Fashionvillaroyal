@@ -1,53 +1,65 @@
-const mongoose = require('mongoose');
+const express = require('express');
+const router = express.Router();
+const Order = require('../models/Order');
 
-const orderItemSchema = new mongoose.Schema({
-  product: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Product',
-    required: true
-  },
-  title: String,
-  price: Number,
-  quantity: Number,
-  image: String
-});
+router.post('/', async (req, res) => {
+  try {
+    const { items, totalAmount, shippingDetails, paymentMethod } = req.body;
 
-const orderSchema = new mongoose.Schema({
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
-  },
-  items: [orderItemSchema],
-  totalAmount: {
-    type: Number,
-    required: true
-  },
-  shippingDetails: {
-    fullName: { type: String, required: true },
-    email: { type: String, required: true },
-    phone: { type: String, required: true },
-    address: { type: String, required: true },
-    city: { type: String, required: true },
-    pincode: { type: String, required: true },
-    state: { type: String, default: 'India' }
-  },
-  paymentMethod: {
-    type: String,
-    enum: ['COD', 'Online', 'UPI'],
-    default: 'COD'
-  },
-  paymentStatus: {
-    type: String,
-    enum: ['Pending', 'Completed', 'Failed'],
-    default: 'Pending'
-  },
-  orderStatus: {
-    type: String,
-    enum: ['Placed', 'Processing', 'Shipped', 'Delivered', 'Cancelled'],
-    default: 'Placed'
+    if (!items || !Array.isArray(items) || items.length === 0) {
+      return res.status(400).json({ success: false, message: 'Cart is empty.' });
+    }
+
+    if (!shippingDetails) {
+      return res.status(400).json({ success: false, message: 'Shipping contact details are required.' });
+    }
+
+    const { fullName, email, phone, address, city, pincode } = shippingDetails;
+    if (!fullName || !phone || !email || !address || !city || !pincode) {
+      return res.status(400).json({ success: false, message: 'Please fill all shipping details.' });
+    }
+
+    const newOrder = new Order({
+      items,
+      totalAmount,
+      shippingDetails,
+      paymentMethod: paymentMethod || 'COD',
+      orderStatus: 'Placed'
+    });
+
+    await newOrder.save();
+    res.status(201).json({ success: true, message: 'Order placed successfully!', orderId: newOrder._id, order: newOrder });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Failed to place order.', error: error.message });
   }
-}, {
-  timestamps: true
 });
 
-module.exports = mongoose.model('Order', orderSchema);
+router.get('/my-orders', async (req, res) => {
+  try {
+    const orders = await Order.find().sort({ createdAt: -1 });
+    res.json({ success: true, count: orders.length, orders });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Failed to retrieve orders.' });
+  }
+});
+
+router.get('/', async (req, res) => {
+  try {
+    const orders = await Order.find().sort({ createdAt: -1 });
+    res.json({ success: true, count: orders.length, orders });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Failed to fetch orders.' });
+  }
+});
+
+router.put('/:id/status', async (req, res) => {
+  try {
+    const { orderStatus } = req.body;
+    const order = await Order.findByIdAndUpdate(req.params.id, { orderStatus }, { new: true });
+    res.json({ success: true, message: `Order status updated to ${orderStatus}`, order });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Failed to update order status.' });
+  }
+});
+
+module.exports = router;
