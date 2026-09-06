@@ -115,7 +115,7 @@ router.post('/register', async (req, res) => {
       user: createdUser
     });
   } catch (error) {
-    res.status(500).json({ success: false, message: 'Registration server notice', error: error.message });
+    res.status(500).json({ success: false, message: 'Registration notice', error: error.message });
   }
 });
 
@@ -132,7 +132,7 @@ router.post('/forgot-password', async (req, res) => {
 });
 
 router.post('/verify-otp-reset', async (req, res) => {
-  res.json({ success: true, message: 'Password reset successfully! You can now log in with your new password.' });
+  res.json({ success: true, message: 'Password reset successfully!' });
 });
 
 router.post('/change-password', async (req, res) => {
@@ -140,7 +140,7 @@ router.post('/change-password', async (req, res) => {
 });
 
 router.get('/me', async (req, res) => {
-  res.json({ success: true, user: req.user });
+  res.json({ success: true, user: req.user || { name: 'User', role: 'customer' } });
 });
 
 module.exports = router;
