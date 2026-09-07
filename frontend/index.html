@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fashionvillaroyal | Premium Fashion & Ethnic Collection</title>
+  <meta name="description" content="Fashionvillaroyal - Shop premium sarees, kurtis, suits, and trendy fashion online or directly on Meesho & Flipkart.">
+  <!-- Google Fonts & Font Awesome Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Top Announcement Bar (Configurable from Admin CMS) -->
+  <div class="announcement-bar" id="announcementBar">
+    <div class="container announcement-content">
+      <span id="announcementText"><i class="fa-solid fa-store"></i> We are available in Meesho, Flipkart, Amazon & Custom Stores.</span>
+      <div class="announcement-links">
+        <a href="mailto:fhub0021@gmail.com"><i class="fa-solid fa-envelope"></i> fhub0021@gmail.com</a>
+        <a href="#" onclick="openModal('supportModal')"><i class="fa-solid fa-headset"></i> Customer Support</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Super Admin Maintenance Alert Bar -->
+  <div class="maintenance-banner hidden" id="maintenanceBanner">
+    <i class="fa-solid fa-triangle-exclamation"></i>
+    <span>NOTICE: Fashionvillaroyal is undergoing scheduled system maintenance by Head Admin. Ordering may be temporarily restricted.</span>
+  </div>
+
+  <!-- Header Navigation -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <a href="#" class="brand-logo">
+        <span class="logo-icon"><i class="fa-solid fa-crown"></i></span>
+        <span class="logo-text">Fashionvillaroyal</span>
+      </a>
+
+      <!-- Search Bar -->
+      <div class="nav-search">
+        <input type="text" id="searchInput" placeholder="Search catalog, kurties, sarees, brands...">
+        <button id="searchBtn"><i class="fa-solid fa-magnifying-glass"></i></button>
+      </div>
+
+      <!-- Navigation Actions -->
+      <div class="nav-actions">
+        <!-- Front Page Quick Portal Switcher Button (Seller vs Head Admin) -->
+        <button class="nav-link-btn" onclick="openModal('portalSwitcherModal')" style="background: linear-gradient(135deg, var(--primary), var(--accent-pink)); color: white;">
+          <i class="fa-solid fa-arrows-split-up-and-left"></i> Switch Portal
+        </button>
+
+        <button class="nav-link-btn" onclick="filterCategory('All')"><i class="fa-solid fa-house"></i> Home</button>
+        <button class="nav-link-btn" onclick="scrollToSection('catalogSection')"><i class="fa-solid fa-bag-shopping"></i> Shop</button>
+        <button class="nav-link-btn" onclick="openWishlistModal()"><i class="fa-solid fa-heart text-pink"></i> Wishlist (<span id="wishlistCountBadge">0</span>)</button>
+        <button class="nav-link-btn" onclick="openMyOrdersModal()"><i class="fa-solid fa-truck-fast"></i> My Orders</button>
+
+        <!-- Dedicated Seller Hub Button -->
+        <button class="nav-link-btn hidden text-pink" id="navSellerBtn" onclick="openModal('sellerModal')">
+          <i class="fa-solid fa-store"></i> Seller Hub
+        </button>
+        
+        <!-- Cart Button with Counter Badge -->
+        <button class="nav-link-btn cart-btn" id="openCartBtn" onclick="toggleCartDrawer()">
+          <i class="fa-solid fa-cart-shopping"></i>
+          <span class="cart-badge" id="cartCountBadge">0</span>
+        </button>
+
+        <!-- User Account Menu / Auth Button -->
+        <div class="user-menu-container" id="userMenuContainer">
+          <button class="nav-link-btn auth-trigger-btn" id="authBtn" onclick="openModal('authModal')">
+            <i class="fa-solid fa-user"></i> <span id="authBtnText">Login</span>
+          </button>
+          <div class="user-dropdown hidden" id="userDropdown">
+            <div class="dropdown-header" id="dropdownUserName">Guest User</div>
+            <div class="dropdown-role" id="dropdownUserRole">Customer</div>
+            <hr>
+            <button onclick="openUserProfileModal()"><i class="fa-solid fa-id-card"></i> My Profile & Address</button>
+            <button onclick="openWishlistModal()"><i class="fa-solid fa-heart text-pink"></i> My Wishlist</button>
+            <button onclick="openMyOrdersModal()"><i class="fa-solid fa-box-open"></i> My Orders & Status</button>
+            <button onclick="openModal('changePasswordModal')"><i class="fa-solid fa-key"></i> Change Password</button>
+            <button id="sellerPanelLink" class="hidden text-pink" onclick="openModal('sellerModal')"><i class="fa-solid fa-store"></i> Seller Hub & Catalog</button>
+            <button id="adminPanelLink" class="hidden" onclick="openModal('adminModal')"><i class="fa-solid fa-sliders"></i> Admin CMS & Dashboard</button>
+            <hr>
+            <button class="logout-btn" onclick="handleLogout()"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Slideshow Carousel (Editable via Admin Panel) -->
+  <section class="hero-carousel-section">
+    <div class="carousel-container" id="carouselContainer">
+      <!-- Slides rendered dynamically by JavaScript -->
+    </div>
+    <button class="carousel-prev" onclick="prevSlide()"><i class="fa-solid fa-chevron-left"></i></button>
+    <button class="carousel-next" onclick="nextSlide()"><i class="fa-solid fa-chevron-right"></i></button>
+    <div class="carousel-dots" id="carouselDots"></div>
+  </section>
+
+  <!-- Marketplace Trust Banner -->
+  <section class="trust-banner">
+    <div class="container trust-flex">
+      <div class="trust-item">
+        <i class="fa-solid fa-truck-fast"></i>
+        <div>
+          <h4>Express Fast Delivery</h4>
+          <p>Pan-India shipping with live tracking</p>
+        </div>
+      </div>
+      <div class="trust-item">
+        <i class="fa-solid fa-shield-halved"></i>
+        <div>
+          <h4>Verified Seller Products</h4>
+          <p>Multi-view catalog like Meesho & Flipkart</p>
+        </div>
+      </div>
+      <div class="trust-item">
+        <i class="fa-solid fa-arrow-rotate-left"></i>
+        <div>
+          <h4>Easy Returns & Refund</h4>
+          <p>7 Days hassle-free return guarantee</p>
+        </div>
+      </div>
+      <div class="trust-item">
+        <i class="fa-solid fa-envelope-circle-check"></i>
+        <div>
+          <h4>24/7 Dedicated Support</h4>
+          <p>Direct mail to fhub0021@gmail.com</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Special Offer Banners Section (Editable from Admin CMS) -->
+  <section class="container offers-section">
+    <div class="offers-grid" id="offersGrid">
+      <!-- Offer Cards rendered dynamically -->
+    </div>
+  </section>
+
+  <!-- Product Catalog Section -->
+  <main class="container catalog-section" id="catalogSection">
+    
+    <!-- Filter Header -->
+    <div class="catalog-header">
+      <div class="catalog-title">
+        <h2>Explore Trending Collections</h2>
+        <p>Buy directly from Fashionvillaroyal or shop on Meesho & Flipkart!</p>
+      </div>
+      
+      <!-- Category Filter Pills -->
+      <div class="category-pills" id="categoryPills">
+        <button class="cat-pill active" onclick="filterCategory('All')">All Products</button>
+        <button class="cat-pill" onclick="filterCategory('Sarees')">Sarees</button>
+        <button class="cat-pill" onclick="filterCategory('Kurti Sets')">Kurti Sets</button>
+        <button class="cat-pill" onclick="filterCategory('Lehengas')">Lehengas</button>
+        <button class="cat-pill" onclick="filterCategory('Western')">Western Wear</button>
+        <button class="cat-pill" onclick="filterCategory('Jewelry')">Jewelry & Accessories</button>
+      </div>
+    </div>
+
+    <!-- Product Grid -->
+    <div class="product-grid" id="productGrid">
+      <!-- Product cards generated by app.js -->
+    </div>
+  </main>
+
+  <!-- PORTAL SWITCHER MODAL (Seller Hub vs Head Admin Hub Selection) -->
+  <div class="modal-overlay hidden" id="portalSwitcherModal" onclick="closeModalOnOverlay(event, 'portalSwitcherModal')">
+    <div class="modal-card">
+      <button class="modal-close" onclick="closeModal('portalSwitcherModal')" title="Close">&times;</button>
+      <div class="modal-header">
+        <i class="fa-solid fa-arrows-split-up-and-left modal-icon text-purple"></i>
+        <h3>Select Portal Interface</h3>
+        <p>Choose your workspace destination</p>
+      </div>
+
+      <div class="portal-switcher-grid">
+        <div class="portal-choice-card" onclick="choosePortal('seller')">
+          <i class="fa-solid fa-store text-pink"></i>
+          <h4>Seller Hub Portal</h4>
+          <p style="font-size:0.8rem; color:var(--gray-500);">List new products, multi-photos, stock & catalog</p>
+        </div>
+        <div class="portal-choice-card" onclick="choosePortal('admin')">
+          <i class="fa-solid fa-shield-halved text-purple"></i>
+          <h4>Head Admin Hub</h4>
+          <p style="font-size:0.8rem; color:var(--gray-500);">Seller approvals, maintenance mode, CMS & security</p>
+        </div>
+      </div>
+
+      <div class="modal-footer-close">
+        <button class="btn btn-secondary" onclick="closeModal('portalSwitcherModal')"><i class="fa-solid fa-xmark"></i> Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CUSTOMER WISHLIST MODAL -->
+  <div class="modal-overlay hidden" id="wishlistModal" onclick="closeModalOnOverlay(event, 'wishlistModal')">
+    <div class="modal-card modal-lg">
+      <button class="modal-close" onclick="closeModal('wishlistModal')" title="Close">&times;</button>
+      <div class="modal-header">
+        <i class="fa-solid fa-heart modal-icon text-pink"></i>
+        <h3>My Saved Wishlist Items</h3>
+        <p>Your favorite saved fashion items</p>
+      </div>
+
+      <div id="wishlistGridContainer" class="product-grid">
+        <!-- Rendered dynamically by app.js -->
+      </div>
+
+      <div class="modal-footer-close">
+        <button class="btn btn-secondary" onclick="closeModal('wishlistModal')"><i class="fa-solid fa-arrow-left"></i> Return to Shopping</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- USER PROFILE & ADDRESS MANAGEMENT MODAL -->
+  <div class="modal-overlay hidden" id="userProfileModal" onclick="closeModalOnOverlay(event, 'userProfileModal')">
+    <div class="modal-card modal-lg">
+      <button class="modal-close" onclick="closeModal('userProfileModal')" title="Close">&times;</button>
+      <div class="modal-header">
+        <i class="fa-solid fa-id-card modal-icon text-purple"></i>
+        <h3>Account Profile & Saved Addresses</h3>
+        <p>Update profile picture, store details, and delivery address</p>
+      </div>
+
+      <form id="userProfileForm" onsubmit="handleSaveProfile(event)">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Full Name *</label>
+            <input type="text" id="profName" required>
+          </div>
+          <div class="form-group">
+            <label>Mobile Number</label>
+            <input type="tel" id="profPhone">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Profile Picture / Avatar Image URL</label>
+          <input type="url" id="profAvatarUrl" placeholder="https://image-url.com/avatar.jpg">
+        </div>
+
+        <!-- Seller Specific Store Banner -->
+        <div class="form-group hidden" id="profSellerFields">
+          <label>Store / Brand Name *</label>
+          <input type="text" id="profStoreName" placeholder="e.g. Royal Fashion Hub">
+          <label style="margin-top:10px;">Store Banner Header Image URL</label>
+          <input type="url" id="profBannerUrl" placeholder="https://image-url.com/banner.jpg">
+        </div>
+
+        <h4 class="form-section-title"><i class="fa-solid fa-location-dot"></i> Saved Address (Delivery / Warehouse Pickup)</h4>
+        <div class="form-group">
+          <label>Street Address / Flat No / Area</label>
+          <input type="text" id="profStreet" placeholder="House no, Street, Landmark">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>City</label>
+            <input type="text" id="profCity" placeholder="City">
+          </div>
+          <div class="form-group">
+            <label>State</label>
+            <input type="text" id="profState" placeholder="State">
+          </div>
+          <div class="form-group">
+            <label>Pincode</label>
+            <input type="text" id="profPincode" placeholder="6-digit pincode">
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block btn-lg"><i class="fa-solid fa-floppy-disk"></i> Save Profile & Address Changes</button>
+      </form>
+
+      <hr style="margin:20px 0;">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <div>
+          <strong style="color:var(--danger);"><i class="fa-solid fa-triangle-exclamation"></i> Danger Zone</strong>
+          <p style="font-size:0.8rem; color:var(--gray-500);">Permanently remove your account and saved data</p>
+        </div>
+        <button class="btn btn-secondary" onclick="handleDeleteAccount()" style="color:var(--danger); border:1px solid var(--danger);">
+          <i class="fa-solid fa-user-slash"></i> Delete My Account
+        </button>
+      </div>
+
+      <div class="modal-footer-close">
+        <button class="btn btn-secondary" onclick="closeModal('userProfileModal')"><i class="fa-solid fa-xmark"></i> Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- DEDICATED SELLER SHOP PROFILE MODAL (Public Seller Store View with Follow Button) -->
+  <div class="modal-overlay hidden" id="sellerStoreProfileModal" onclick="closeModalOnOverlay(event, 'sellerStoreProfileModal')">
+    <div class="modal-card modal-xl">
+      <button class="modal-close" onclick="closeModal('sellerStoreProfileModal')" title="Close">&times;</button>
+      
+      <div class="seller-profile-banner" id="shopProfileBanner">
+        <img src="" class="seller-banner-img" id="shopBannerImg" alt="Store Banner">
+        <img src="" class="seller-avatar-large" id="shopAvatarImg" alt="Store Avatar">
+      </div>
+
+      <div class="seller-profile-info">
+        <div>
+          <h2 id="shopStoreName">Royal Store Outlet</h2>
+          <p style="font-size:0.85rem; color:var(--gray-500);"><i class="fa-solid fa-location-dot text-pink"></i> <span id="shopLocation">Surat, Gujarat</span> | <i class="fa-solid fa-star text-gold"></i> Rating: <strong id="shopRating">4.8 ★</strong> (<span id="shopFollowers">120</span> Followers)</p>
+        </div>
+        <button class="btn btn-primary" id="btnFollowShop" onclick="toggleFollowShop()">
+          <i class="fa-solid fa-user-plus"></i> Follow Store
+        </button>
+      </div>
+
+      <h3 style="margin-bottom:15px;"><i class="fa-solid fa-boxes-stacked text-purple"></i> Products Listed by this Seller</h3>
+      <div class="product-grid" id="sellerShopProductGrid">
+        <!-- Rendered dynamically by app.js -->
+      </div>
+
+      <div class="modal-footer-close">
+        <button class="btn btn-secondary" onclick="closeModal('sellerStoreProfileModal')"><i class="fa-solid fa-arrow-left"></i> Return to Shopping</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- BUYER ORDER TRACKING & MY ORDERS MODAL -->
+  <div class="modal-overlay hidden" id="myOrdersModal" onclick="closeModalOnOverlay(event, 'myOrdersModal')">
+    <div class="modal-card modal-lg">
+      <button class="modal-close" onclick="closeModal('myOrdersModal')" title="Close">&times;</button>
+      <div class="modal-header">
+        <i class="fa-solid fa-box-open modal-icon text-purple"></i>
+        <h3>My Orders & Live Order Status</h3>
+        <p>Track your placed orders, progress step, and delivery status</p>
+      </div>
+
+      <div id="myOrdersListContainer">
+        <!-- Rendered dynamically by app.js -->
+      </div>
+
+      <div class="modal-footer-close">
+        <button class="btn btn-secondary" onclick="closeModal('myOrdersModal')"><i class="fa-solid fa-arrow-left"></i> Return to Shopping</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Customer Support Modal -->
+  <div class="modal-overlay hidden" id="supportModal" onclick="closeModalOnOverlay(event, 'supportModal')">
+    <div class="modal-card">
+      <button class="modal-close" onclick="closeModal('supportModal')" title="Close">&times;</button>
+      <div class="modal-header">
+        <i class="fa-solid fa-headset modal-icon"></i>
+        <h3>Customer Support & Inquiry</h3>
+        <p>Direct assistance for customers & sellers</p>
+      </div>
+      <div class="support-direct-box">
+        <p><i class="fa-solid fa-envelope"></i> Direct Email: <strong id="supportEmailDisplay">fhub0021@gmail.com</strong></p>
+        <p><i class="fa-solid fa-clock"></i> Support Hours: Mon - Sat (9:00 AM - 8:00 PM)</p>
+      </div>
+      <form id="contactForm" onsubmit="handleContactSubmit(event)">
+        <div class="form-group">
+          <label>Your Name *</label>
+          <input type="text" id="contactName" required placeholder="Enter your full name">
+        </div>
+        <div class="form-group">
+          <label>Your Email *</label>
+          <input type="email" id="contactEmail" required placeholder="name@example.com">
+        </div>
+        <div class="form-group">
+          <label>Mobile Number</label>
+          <input type="tel" id="contactPhone" placeholder="10-digit mobile number">
+        </div>
+        <div class="form-group">
+          <label>Subject</label>
+          <input type="text" id="contactSubject" placeholder="Order status, product inquiry, return...">
+        </div>
+        <div class="form-group">
+          <label>Your Message *</label>
+          <textarea id="contactMessage" rows="4" required placeholder="Write your question or request here..."></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block"><i class="fa-solid fa-paper-plane"></i> Send Message to Support</button>
+      </form>
+
+      <div class="modal-footer-close">
+        <button class="btn btn-secondary" onclick="closeModal('supportModal')"><i class="fa-solid fa-xmark"></i> Close Window</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cart Drawer Overlay -->
+  <div class="cart-drawer-overlay hidden" id="cartDrawerOverlay" onclick="toggleCartDrawer()"></div>
+  <aside class="cart-drawer hidden" id="cartDrawer">
+    <div class="cart-drawer-header">
+      <h3><i class="fa-solid fa-bag-shopping"></i> Shopping Cart (<span id="cartDrawerCount">0</span>)</h3>
+      <button class="drawer-close-btn" onclick="toggleCartDrawer()" title="Close">&times;</button>
+    </div>
+    <div class="cart-drawer-body" id="cartDrawerBody">
+      <!-- Cart items injected here -->
+    </div>
+    <div class="cart-drawer-footer" id="cartDrawerFooter">
+      <div class="cart-summary-line">
+        <span>Subtotal</span>
+        <span class="cart-subtotal-val" id="cartSubtotal">₹0</span>
+      </div>
+      <div class="cart-summary-line">
+        <span>Delivery Charge</span>
+        <span class="free-text">FREE</span>
+      </div>
+      <div class="cart-summary-line total-line">
+        <span>Grand Total</span>
+        <span class="cart-total-val" id="cartGrandTotal">₹0</span>
+      </div>
+      <button class="btn btn-success btn-block" onclick="openCheckoutModal()"><i class="fa-solid fa-lock"></i> Proceed to Checkout</button>
+    </div>
+  </aside>
+
+  <!-- Checkout & Contact Details Modal -->
+  <div class="modal-overlay hidden" id="checkoutModal" onclick="closeModalOnOverlay(event, 'checkoutModal')">
+    <div class="modal-card modal-lg">
+      <button class="modal-close" onclick="closeModal('checkoutModal')" title="Close">&times;</button>
+      <div class="modal-header">
+        <i class="fa-solid fa-truck-ramp-box modal-icon"></i>
+        <h3>Shipping & Contact Details</h3>
+        <p>Fill out contact information accurately for order confirmation</p>
+      </div>
+
+      <div class="checkout-grid">
+        <form id="checkoutForm" onsubmit="handlePlaceOrder(event)">
+          <h4 class="form-section-title"><i class="fa-solid fa-user-check"></i> Customer Contact Info</h4>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Full Name *</label>
+              <input type="text" id="shipFullName" required placeholder="e.g. Ananya Sharma">
+            </div>
+            <div class="form-group">
+              <label>Mobile Number *</label>
+              <input type="tel" id="shipPhone" required placeholder="10-digit mobile number" pattern="[0-9]{10}">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Email Address *</label>
+            <input type="email" id="shipEmail" required placeholder="e.g. user@gmail.com">
+          </div>
+
+          <h4 class="form-section-title"><i class="fa-solid fa-location-dot"></i> Delivery Address</h4>
+          <div class="form-group">
+            <label>Street Address / House No / Area *</label>
+            <input type="text" id="shipAddress" required placeholder="Flat no., Street, Colony, Landmark">
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>City *</label>
+              <input type="text" id="shipCity" required placeholder="City">
+            </div>
+            <div class="form-group">
+              <label>Pincode *</label>
+              <input type="text" id="shipPincode" required placeholder="6-digit pincode" pattern="[0-9]{6}">
+            </div>
+          </div>
+
+          <h4 class="form-section-title"><i class="fa-solid fa-credit-card"></i> Payment Method</h4>
+          <div class="payment-options">
+            <label class="radio-card">
+              <input type="radio" name="paymentMethod" value="COD" checked>
+              <span><i class="fa-solid fa-money-bill-wave"></i> Cash on Delivery (COD)</span>
+            </label>
+            <label class="radio-card">
+              <input type="radio" name="paymentMethod" value="UPI">
+              <span><i class="fa-solid fa-qrcode"></i> Google Pay / PhonePe / UPI</span>
+            </label>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block btn-lg" id="placeOrderBtn">
+            <i class="fa-solid fa-circle-check"></i> Confirm & Place Order
+          </button>
+        </form>
+
+        <div class="checkout-summary-box">
+          <h4>Order Summary</h4>
+          <div id="checkoutItemsList" class="checkout-items-mini"></div>
+          <hr>
+          <div class="cart-summary-line total-line">
+            <span>Total Payable:</span>
+            <strong id="checkoutTotalAmount">₹0</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer-close">
+        <button class="btn btn-secondary" onclick="closeModal('checkoutModal')"><i class="fa-solid fa-xmark"></i> Cancel Checkout</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Product Detail Modal (Shows Multi-Photo Gallery, Sizes, Reviews & Buying Options) -->
+  <div class="modal-overlay hidden" id="productDetailModal" onclick="closeModalOnOverlay(event, 'productDetailModal')">
+    <div class="modal-card modal-lg">
+      <button class="modal-close" onclick="closeModal('productDetailModal')" title="Close">&times;</button>
+      <div class="product-detail-layout" id="productDetailLayout">
+        <!-- Content rendered dynamically -->
+      </div>
+      <div class="modal-footer-close">
+        <button class="btn btn-secondary" onclick="closeModal('productDetailModal')"><i class="fa-solid fa-arrow-left"></i> Back to Products</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- User Authentication Modal (Login / Register / Forgot Password) -->
+  <div class="modal-overlay hidden" id="authModal" onclick="closeModalOnOverlay(event, 'authModal')">
+    <div class="modal-card">
+      <button class="modal-close" onclick="closeModal('authModal')" title="Close">&times;</button>
+      
+      <!-- Spaced UI/UX Auth Tabs -->
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="tabLogin" onclick="switchAuthTab('login')"><i class="fa-solid fa-right-to-bracket"></i> Login</button>
+        <button class="auth-tab" id="tabRegister" onclick="switchAuthTab('register')"><i class="fa-solid fa-user-plus"></i> Register Account</button>
+      </div>
+
+      <!-- LOGIN FORM -->
+      <form id="loginForm" class="auth-form" onsubmit="handleLoginSubmit(event)">
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" id="loginEmail" required placeholder="Enter your email">
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="loginPassword" required placeholder="Enter password">
+        </div>
+        <div class="forgot-link-wrap">
+          <a href="#" onclick="showForgotPasswordView()">Forgot Password?</a>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Login to Fashionvillaroyal</button>
+      </form>
+
+      <!-- REGISTER FORM -->
+      <form id="registerForm" class="auth-form hidden" onsubmit="handleRegisterSubmit(event)">
+        <div class="form-group">
+          <label>Account Type *</label>
+          <select id="regRole" onchange="toggleStoreNameInput()">
+            <option value="customer">Customer (Buyer)</option>
+            <option value="seller" selected>Seller / Supplier (Catalog Upload)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Full Name *</label>
+          <input type="text" id="regName" required placeholder="Your full name">
+        </div>
+        <div class="form-group" id="storeNameGroup">
+          <label>Store / Brand Name *</label>
+          <input type="text" id="regStoreName" placeholder="e.g. Royal Fashion Hub">
+        </div>
+        <div class="form-group">
+          <label>Email Address *</label>
+          <input type="email" id="regEmail" required placeholder="name@example.com">
+        </div>
+        <div class="form-group">
+          <label>Mobile Number</label>
+          <input type="tel" id="regPhone" placeholder="10-digit mobile number">
+        </div>
+        <div class="form-group">
+          <label>Password *</label>
+          <input type="password" id="regPassword" required placeholder="Min. 6 characters">
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Create Seller / Customer Account</button>
+      </form>
+
+      <!-- FORGOT PASSWORD & OTP FORM -->
+      <div id="forgotPasswordView" class="auth-form hidden">
+        <h4 class="otp-title"><i class="fa-solid fa-key"></i> Forgot Password (OTP Verification)</h4>
+        
+        <!-- STEP 1: Request OTP -->
+        <div id="otpStep1">
+          <p class="small-desc">Enter your registered email or mobile number to receive a 6-digit verification code.</p>
+          <div class="form-group">
+            <label>Registered Email or Mobile</label>
+            <input type="text" id="otpTargetInput" placeholder="Email or 10-digit mobile number">
+          </div>
+          <button type="button" class="btn btn-primary btn-block" onclick="handleSendOTP()"><i class="fa-solid fa-paper-plane"></i> Send OTP Code</button>
+        </div>
+
+        <!-- STEP 2: Verify OTP & New Password -->
+        <div id="otpStep2" class="hidden">
+          <p class="small-desc">Enter the 6-digit OTP code sent to your email/mobile and set a new password.</p>
+          <div class="form-group">
+            <label>Enter 6-Digit OTP *</label>
+            <input type="text" id="otpCodeInput" maxlength="6" placeholder="e.g. 123456" class="otp-input-field">
+          </div>
+          <div class="form-group">
+            <label>New Password *</label>
+            <input type="password" id="otpNewPasswordInput" placeholder="Min 6 characters">
+          </div>
+          <button type="button" class="btn btn-success btn-block" onclick="handleVerifyOTPAndReset()"><i class="fa-solid fa-check"></i> Reset & Save Password</button>
+        </div>
+
+        <button type="button" class="btn-link" onclick="hideForgotPasswordView()">&larr; Back to Login</button>
+      </div>
+
+      <div class="modal-footer-close">
+        <button class="btn btn-secondary" onclick="closeModal('authModal')"><i class="fa-solid fa-xmark"></i> Close Window</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Change Password Modal -->
+  <div class="modal-overlay hidden" id="changePasswordModal" onclick="closeModalOnOverlay(event, 'changePasswordModal')">
+    <div class="modal-card">
+      <button class="modal-close" onclick="closeModal('changePasswordModal')" title="Close">&times;</button>
+      <div class="modal-header">
+        <i class="fa-solid fa-lock-open modal-icon"></i>
+        <h3>Change Account Password</h3>
+      </div>
+      <form id="changePasswordForm" onsubmit="handleChangePasswordSubmit(event)">
+        <div class="form-group">
+          <label>Current Password *</label>
+          <input type="password" id="currPassword" required placeholder="Enter current password">
+        </div>
+        <div class="form-group">
+          <label>New Password *</label>
+          <input type="password" id="newPassword" required placeholder="Enter new password (min. 6 chars)">
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Update Password</button>
+      </form>
+      <div class="modal-footer-close">
+        <button class="btn btn-secondary" onclick="closeModal('changePasswordModal')"><i class="fa-solid fa-xmark"></i> Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Seller Hub & Catalog Upload Modal -->
+  <div class="modal-overlay hidden" id="sellerModal" onclick="closeModalOnOverlay(event, 'sellerModal')">
+    <div class="modal-card modal-xl">
+      <button class="modal-close" onclick="closeModal('sellerModal')" title="Close">&times;</button>
+      <div class="modal-header">
+        <i class="fa-solid fa-store modal-icon text-pink"></i>
+        <h3>Fashionvillaroyal Seller Hub & Catalog Panel</h3>
+        <p>List new products, upload up to 10 photos with redo options, set sizes, stock, colors & payment choices</p>
+      </div>
+
+      <!-- Seller Sub-Tabs -->
+      <div class="admin-tabs">
+        <button class="admin-tab active" id="sellerTabAdd" onclick="switchSellerTab('add')"><i class="fa-solid fa-cloud-arrow-up"></i> Add New Product</button>
+        <button class="admin-tab" id="sellerTabList" onclick="switchSellerTab('list')"><i class="fa-solid fa-boxes-stacked"></i> My Listed Catalog</button>
+      </div>
+      
+      <!-- TAB 1: ADD PRODUCT FORM -->
+      <div id="sellerAddView">
+        <form id="sellerAddProductForm" onsubmit="handleCreateProduct(event)">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Product Title *</label>
+              <input type="text" id="prodTitle" required placeholder="e.g. Royal Designer Embroidered Saree">
+            </div>
+            <div class="form-group">
+              <label>Category *</label>
+              <select id="prodCategory" required onchange="toggleCustomCategoryInput()">
+                <option value="Sarees">Sarees</option>
+                <option value="Kurti Sets">Kurti Sets</option>
+                <option value="Lehengas">Lehengas</option>
+                <option value="Western">Western Wear</option>
+                <option value="Jewelry">Jewelry & Accessories</option>
+                <option value="Gowns & Suits">Gowns & Suits</option>
+                <option value="Custom">Custom Category...</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Custom Category Input -->
+          <div class="form-group hidden" id="customCategoryGroup">
+            <label><i class="fa-solid fa-pen-nib text-purple"></i> Specify Custom Category *</label>
+            <input type="text" id="prodCustomCategory" placeholder="e.g. Handmade Handloom Dupattas">
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Selling Price (₹) *</label>
+              <input type="number" id="prodPrice" required placeholder="e.g. 799" min="1">
+            </div>
+            <div class="form-group">
+              <label>Original MRP (₹)</label>
+              <input type="number" id="prodOriginalPrice" placeholder="e.g. 1999">
+            </div>
+            <div class="form-group">
+              <label><i class="fa-solid fa-boxes-stacked"></i> Available Stock Quantity *</label>
+              <input type="number" id="prodStock" required value="50" min="0" placeholder="e.g. 50 units (0 = Out of Stock)">
+            </div>
+          </div>
+
+          <!-- Available Sizes Selection -->
+          <div class="form-group">
+            <label><i class="fa-solid fa-ruler-combined text-purple"></i> Available Sizes (Select all that apply)</label>
+            <div class="size-checkbox-grid">
+              <label class="size-pill-label"><input type="checkbox" name="prodSizes" value="S" checked> S</label>
+              <label class="size-pill-label"><input type="checkbox" name="prodSizes" value="M" checked> M</label>
+              <label class="size-pill-label"><input type="checkbox" name="prodSizes" value="L" checked> L</label>
+              <label class="size-pill-label"><input type="checkbox" name="prodSizes" value="XL" checked> XL</label>
+              <label class="size-pill-label"><input type="checkbox" name="prodSizes" value="XXL" checked> XXL</label>
+              <label class="size-pill-label"><input type="checkbox" name="prodSizes" value="3XL"> 3XL</label>
+              <label class="size-pill-label"><input type="checkbox" name="prodSizes" value="Free Size"> Free Size</label>
+            </div>
+          </div>
+
+          <!-- Color Selection Section -->
+          <div class="form-group">
+            <label><i class="fa-solid fa-palette text-purple"></i> Available Product Colors (Select all that apply)</label>
+            <div class="color-checkbox-grid">
+              <label class="color-pill-label"><input type="checkbox" name="prodColors" value="Black"> Black</label>
+              <label class="color-pill-label"><input type="checkbox" name="prodColors" value="Blue"> Blue</label>
+              <label class="color-pill-label"><input type="checkbox" name="prodColors" value="Red"> Red</label>
+              <label class="color-pill-label"><input type="checkbox" name="prodColors" value="Pink"> Pink</label>
+              <label class="color-pill-label"><input type="checkbox" name="prodColors" value="Green"> Green</label>
+              <label class="color-pill-label"><input type="checkbox" name="prodColors" value="Gold"> Gold</label>
+              <label class="color-pill-label"><input type="checkbox" name="prodColors" value="White"> White</label>
+              <label class="color-pill-label"><input type="checkbox" name="prodColors" value="Multi"> Multi-Color</label>
+              <label class="color-pill-label"><input type="checkbox" id="chkCustomColor" onchange="toggleCustomColorInput()"> Custom Color</label>
+            </div>
+            <div class="form-group hidden" id="customColorGroup" style="margin-top: 10px;">
+              <input type="text" id="prodCustomColorInput" placeholder="Specify custom color (e.g. Lavender, Maroon, Peach)">
+            </div>
+          </div>
+
+          <!-- Accepted Payment Methods Selection -->
+          <div class="form-group">
+            <label><i class="fa-solid fa-wallet text-purple"></i> Accepted Payment Options for this Product *</label>
+            <div class="payment-checkbox-grid">
+              <label class="payment-pill-label"><input type="checkbox" name="prodPayments" value="COD" checked> <i class="fa-solid fa-money-bill-wave"></i> Cash on Delivery (COD)</label>
+              <label class="payment-pill-label"><input type="checkbox" name="prodPayments" value="UPI" checked> <i class="fa-solid fa-qrcode"></i> Online UPI (GPay / PhonePe)</label>
+              <label class="payment-pill-label"><input type="checkbox" name="prodPayments" value="Card" checked> <i class="fa-solid fa-credit-card"></i> Cards & Net Banking</label>
+            </div>
+          </div>
+
+          <!-- Meesho, Flipkart & Custom Marketplace Direct Links -->
+          <div class="form-row">
+            <div class="form-group">
+              <label><i class="fa-solid fa-link text-pink"></i> Meesho Product Link (Optional)</label>
+              <input type="url" id="prodMeeshoUrl" placeholder="https://www.meesho.com/s/p/12345">
+            </div>
+            <div class="form-group">
+              <label><i class="fa-solid fa-link text-blue"></i> Flipkart Product Link (Optional)</label>
+              <input type="url" id="prodFlipkartUrl" placeholder="https://www.flipkart.com/dp/12345">
+            </div>
+            <div class="form-group">
+              <label><i class="fa-solid fa-globe text-purple"></i> Custom Marketplace / Amazon URL (Optional)</label>
+              <input type="url" id="prodCustomMarketplaceUrl" placeholder="https://www.amazon.in/dp/12345 or website link">
+            </div>
+          </div>
+
+          <!-- Catalog Photo Upload (Up to 10 Photos with Redo/Undo feature) -->
+          <div class="form-group">
+            <label><i class="fa-solid fa-images"></i> Product Photos (Upload up to 10 Photos for Multi-Angle Views) *</label>
+            <div class="photo-upload-container">
+              <div class="file-drop-box">
+                <input type="file" id="prodImageFiles" accept="image/*" multiple onchange="handleMultiPhotoSelect(event, 'add')">
+                <p><i class="fa-solid fa-cloud-arrow-up" style="font-size:1.8rem; color:var(--primary);"></i> Click or drop to select up to 10 photo files from your device</p>
+              </div>
+
+              <div style="margin-top: 10px; font-size: 0.85rem; color: var(--gray-700);">Or enter image URLs below (comma separated):</div>
+              <input type="text" id="prodImageUrl" placeholder="https://image1.com, https://image2.com..." oninput="previewUploadPhotoUrls('add')">
+
+              <!-- Multi-Photo Preview & Redo Options Grid -->
+              <div class="multi-photo-grid" id="addMultiPhotoPreviewGrid">
+                <!-- Rendered dynamically with Redo / Delete buttons -->
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Product Description *</label>
+            <textarea id="prodDescription" rows="4" required placeholder="Fabric quality, sizing details, care instructions..."></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block btn-lg"><i class="fa-solid fa-circle-plus"></i> Publish Catalog Product to Store</button>
+        </form>
+      </div>
+
+      <!-- TAB 2: MY LISTED CATALOG INVENTORY -->
+      <div id="sellerListView" class="hidden">
+        <div class="table-responsive">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Image</th>
+                <th>Title</th>
+                <th>Category</th>
+                <th>Price / Stock</th>
+                <th>Marketplace Links</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="sellerProductsTableBody">
+              <!-- Rendered dynamically by app.js -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="modal-footer-close">
+        <button class="btn btn-secondary" onclick="closeModal('sellerModal')"><i class="fa-solid fa-xmark"></i> Close Seller Hub</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- EDIT PRODUCT MODAL (For Seller Catalog Editing) -->
+  <div class="modal-overlay hidden" id="editProductModal" onclick="closeModalOnOverlay(event, 'editProductModal')">
+    <div class="modal-card modal-lg">
+      <button class="modal-close" onclick="closeModal('editProductModal')" title="Close">&times;</button>
+      <div class="modal-header">
+        <i class="fa-solid fa-pen-to-square modal-icon text-purple"></i>
+        <h3>Edit Listed Product Details</h3>
+        <p>Update title, category, price, stock, colors, photos, and buying links</p>
+      </div>
+
+      <form id="editProductForm" onsubmit="handleSaveEditedProduct(event)">
+        <input type="hidden" id="editProdId">
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Product Title *</label>
+            <input type="text" id="editProdTitle" required>
+          </div>
+          <div class="form-group">
+            <label>Category *</label>
+            <select id="editProdCategory" required onchange="toggleCustomCategoryInputEdit()">
+              <option value="Sarees">Sarees</option>
+              <option value="Kurti Sets">Kurti Sets</option>
+              <option value="Lehengas">Lehengas</option>
+              <option value="Western">Western Wear</option>
+              <option value="Jewelry">Jewelry & Accessories</option>
+              <option value="Gowns & Suits">Gowns & Suits</option>
+              <option value="Custom">Custom Category...</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group hidden" id="editCustomCategoryGroup">
+          <label>Custom Category *</label>
+          <input type="text" id="editProdCustomCategory">
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Selling Price (₹) *</label>
+            <input type="number" id="editProdPrice" required min="1">
+          </div>
+          <div class="form-group">
+            <label>Original MRP (₹)</label>
+            <input type="number" id="editProdOriginalPrice">
+          </div>
+          <div class="form-group">
+            <label>Available Stock *</label>
+            <input type="number" id="editProdStock" required min="0">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Meesho Product Link</label>
+            <input type="url" id="editProdMeeshoUrl">
+          </div>
+          <div class="form-group">
+            <label>Flipkart Product Link</label>
+            <input type="url" id="editProdFlipkartUrl">
+          </div>
+          <div class="form-group">
+            <label>Custom Marketplace / Amazon Link</label>
+            <input type="url" id="editProdCustomMarketplaceUrl">
+          </div>
+        </div>
+
+        <!-- Edit Multi-Photo Upload -->
+        <div class="form-group">
+          <label>Product Photos (Up to 10 Photos)</label>
+          <div class="photo-upload-container">
+            <div class="file-drop-box">
+              <input type="file" id="editProdImageFiles" accept="image/*" multiple onchange="handleMultiPhotoSelect(event, 'edit')">
+              <p><i class="fa-solid fa-cloud-arrow-up"></i> Select photo files to add or replace</p>
+            </div>
+            <div class="multi-photo-grid" id="editMultiPhotoPreviewGrid">
+              <!-- Rendered dynamically -->
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Product Description *</label>
+          <textarea id="editProdDescription" rows="4" required></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block btn-lg"><i class="fa-solid fa-floppy-disk"></i> Save & Publish Changes</button>
+      </form>
+
+      <div class="modal-footer-close">
+        <button class="btn btn-secondary" onclick="closeModal('editProductModal')"><i class="fa-solid fa-xmark"></i> Cancel Edit</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUPER ADMIN CONTROL PANEL & MAINTENANCE DASHBOARD MODAL -->
+  <div class="modal-overlay hidden" id="adminModal" onclick="closeModalOnOverlay(event, 'adminModal')">
+    <div class="modal-card modal-xl">
+      <button class="modal-close" onclick="closeModal('adminModal')" title="Close">&times;</button>
+      
+      <div class="admin-header">
+        <h2><i class="fa-solid fa-shield-halved text-purple"></i> Fashionvillaroyal Super Admin Control Panel</h2>
+        <p>Head Admin controls for seller verification, suspicious activity blocking, site maintenance & CMS</p>
+      </div>
+
+      <!-- Spaced UI/UX Admin Tabs -->
+      <div class="admin-tabs">
+        <button class="admin-tab active" id="admTabStats" onclick="switchAdminTab('stats')"><i class="fa-solid fa-chart-line"></i> Dashboard Stats</button>
+        <button class="admin-tab" id="admTabSellers" onclick="switchAdminTab('sellers')"><i class="fa-solid fa-user-shield"></i> Manage Sellers & Security (<span id="pendingSellersBadge">0</span>)</button>
+        <button class="admin-tab" id="admTabProducts" onclick="switchAdminTab('products')"><i class="fa-solid fa-boxes-stacked"></i> Products Catalog</button>
+        <button class="admin-tab" id="admTabOrders" onclick="switchAdminTab('orders')"><i class="fa-solid fa-truck"></i> Incoming Orders</button>
+        <button class="admin-tab" id="admTabCMS" onclick="switchAdminTab('cms')"><i class="fa-solid fa-pen-to-square"></i> Homepage Ads & CMS</button>
+      </div>
+
+      <!-- ADMIN TAB 1: OVERVIEW STATS & MAINTENANCE MODE TOGGLE -->
+      <div id="adminStatsView" class="admin-tab-content">
+        <!-- System Maintenance Switch Box -->
+        <div style="background: var(--gray-100); padding: 18px; border-radius: 12px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--gray-200);">
+          <div>
+            <h4 style="color: var(--dark); font-weight: 800;"><i class="fa-solid fa-screwdriver-wrench text-purple"></i> Head Admin System Maintenance Mode</h4>
+            <p style="font-size: 0.85rem; color: var(--gray-500);">Turn ON to notify users and restrict store operations during maintenance</p>
+          </div>
+          <button class="btn btn-secondary" id="btnToggleMaintenance" onclick="handleToggleMaintenanceMode()">
+            <i class="fa-solid fa-power-off"></i> Toggle Maintenance Mode
+          </button>
+        </div>
+
+        <div class="admin-stats-grid">
+          <div class="stat-card">
+            <i class="fa-solid fa-layer-group stat-icon text-purple"></i>
+            <div>
+              <h3 id="statTotalProducts">0</h3>
+              <p>Total Listed Products</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <i class="fa-solid fa-cart-check stat-icon text-green"></i>
+            <div>
+              <h3 id="statTotalOrders">0</h3>
+              <p>Total Orders Placed</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <i class="fa-solid fa-users-gear stat-icon text-pink"></i>
+            <div>
+              <h3 id="statTotalSellers">0</h3>
+              <p>Registered Sellers</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <i class="fa-solid fa-indian-rupee-sign stat-icon text-gold"></i>
+            <div>
+              <h3 id="statTotalRevenue">₹0</h3>
+              <p>Total Revenue</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ADMIN TAB 2: MANAGE SELLERS & SUSPICIOUS ACTIVITY CONTROL -->
+      <div id="adminSellersView" class="admin-tab-content hidden">
+        <div class="admin-action-bar">
+          <h3>Registered Sellers ID Verification & Account Status Control</h3>
+        </div>
+        <div class="table-responsive">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Store / Seller Name</th>
+                <th>Email</th>
+                <th>Registration Date</th>
+                <th>ID Status</th>
+                <th>Action (Approve / Ban / Delete)</th>
+              </tr>
+            </thead>
+            <tbody id="adminSellersTableBody">
+              <!-- Rendered dynamically by app.js -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ADMIN TAB 3: PRODUCTS CATALOG -->
+      <div id="adminProductsView" class="admin-tab-content hidden">
+        <div class="admin-action-bar">
+          <h3>Catalog Inventory</h3>
+          <button class="btn btn-primary" onclick="openModal('sellerModal')"><i class="fa-solid fa-plus"></i> Add New Product</button>
+        </div>
+        <div class="table-responsive">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Image</th>
+                <th>Title</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Marketplace Links</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="adminProductsTableBody">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ADMIN TAB 4: INCOMING ORDERS -->
+      <div id="adminOrdersView" class="admin-tab-content hidden">
+        <h3>Customer Incoming Orders</h3>
+        <div class="table-responsive">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Order ID</th>
+                <th>Customer</th>
+                <th>Contact Phone</th>
+                <th>Address</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="adminOrdersTableBody">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ADMIN TAB 5: HOMEPAGE CMS & EDITABLE ADVERTISEMENTS -->
+      <div id="adminCMSView" class="admin-tab-content hidden">
+        <form id="adminCMSForm" onsubmit="handleSaveCMS(event)">
+          <div class="form-group">
+            <label>Top Announcement Bar Text *</label>
+            <input type="text" id="cmsAnnouncementText" required placeholder="e.g. We are available in Meesho, Flipkart, Amazon etc.">
+          </div>
+
+          <div class="form-group">
+            <label>Support Email Address *</label>
+            <input type="email" id="cmsSupportEmail" required placeholder="fhub0021@gmail.com">
+          </div>
+
+          <hr class="my-4">
+          <h4 class="form-section-title"><i class="fa-solid fa-images"></i> Manage Front Page Slideshow Carousel & Advertisements</h4>
+          
+          <div id="cmsSlidesContainer">
+            <!-- Dynamic Slide Input Blocks -->
+          </div>
+
+          <button type="button" class="btn btn-secondary" onclick="addCMSSlideInput()"><i class="fa-solid fa-plus"></i> Add New Carousel Slide</button>
+
+          <hr class="my-4">
+          <button type="submit" class="btn btn-success btn-lg btn-block"><i class="fa-solid fa-floppy-disk"></i> Save & Publish Front Page Changes</button>
+        </form>
+      </div>
+
+      <div class="modal-footer-close">
+        <button class="btn btn-secondary" onclick="closeModal('adminModal')"><i class="fa-solid fa-xmark"></i> Close Admin Panel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification System -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-grid">
+      <div class="footer-col">
+        <a href="#" class="brand-logo footer-logo">
+          <span class="logo-icon"><i class="fa-solid fa-crown"></i></span>
+          <span class="logo-text">Fashionvillaroyal</span>
+        </a>
+        <p>Fashionvillaroyal is your premier destination for ethnic wear, designer sarees, kurtis, and contemporary fashion. Also available on Meesho and Flipkart.</p>
+        <p class="trust-badge-tag"><i class="fa-solid fa-award"></i> Verified Manufacturer Direct Outlet</p>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="#" onclick="filterCategory('All')">Home Storefront</a></li>
+          <li><a href="#catalogSection">Browse Catalog</a></li>
+          <li><a href="#" onclick="openModal('supportModal')">Customer Support</a></li>
+          <li><a href="#" onclick="openModal('authModal')">Account Login</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Categories</h4>
+        <ul>
+          <li><a href="#" onclick="filterCategory('Sarees')">Designer Sarees</a></li>
+          <li><a href="#" onclick="filterCategory('Kurti Sets')">Kurti & Suit Sets</a></li>
+          <li><a href="#" onclick="filterCategory('Lehengas')">Bridal Lehengas</a></li>
+          <li><a href="#" onclick="filterCategory('Western')">Western Outfits</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Direct Contact</h4>
+        <p><i class="fa-solid fa-envelope"></i> Email: <a href="mailto:fhub0021@gmail.com">fhub0021@gmail.com</a></p>
+        <p><i class="fa-solid fa-clock"></i> Support: Mon-Sat 9AM - 8PM</p>
+        <p><i class="fa-solid fa-location-dot"></i> Surat & Jaipur Wholesale Hub, India</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container">
+        <p>&copy; 2026 Fashionvillaroyal. All rights reserved. Built for Render & Vercel deployment.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
