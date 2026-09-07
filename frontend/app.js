@@ -3,7 +3,8 @@
  * Single-Page Architecture with State Management, Carousel, OTP Auth,
  * Multi-Photo Upload (up to 10 photos) with Redo/Remove buttons,
  * Custom Category & Color Options, Stock Quantity, Meesho/Flipkart/Custom Market Links,
- * Seller Edit Listing & Live Product View, Buyer Order Tracking, and Admin CMS.
+ * Head Admin Controls: Maintenance Mode, Seller Verification & Account Suspension,
+ * Editable Homepage Banner/Ads CMS, Seller Product Payment Method Options, and Order Tracking.
  */
 
 // API Configuration (Supports local server or deployed Render URL)
@@ -18,9 +19,15 @@ const state = {
   cart: JSON.parse(localStorage.getItem('fvr_cart')) || [],
   myOrders: JSON.parse(localStorage.getItem('fvr_my_orders')) || [],
   products: [],
+  sellers: [
+    { id: 'sel_1', name: 'Surat Textile Outlet', email: 'surat_seller@gmail.com', storeName: 'Royal Surat Sarees', status: 'Approved', date: '15 Aug 2026' },
+    { id: 'sel_2', name: 'Jaipur Kurti Supplier', email: 'jaipur_kurti@gmail.com', storeName: 'Jaipur Ethnic Craft', status: 'Pending', date: '01 Sep 2026' },
+    { id: 'sel_3', name: 'Royal Silk Mills', email: 'royal_silk@gmail.com', storeName: 'Royal Silk House', status: 'Approved', date: '04 Sep 2026' }
+  ],
   addPhotos: [],
   editPhotos: [],
   cms: {
+    maintenanceMode: false,
     announcementText: 'We are available in Meesho, Flipkart, Amazon & Custom Stores.',
     supportEmail: 'fhub0021@gmail.com',
     carouselSlides: [
@@ -56,7 +63,7 @@ const state = {
   searchQuery: ''
 };
 
-// Initial Sample Products with Multi-Photos, Colors & Stock
+// Initial Sample Products with Multi-Photos, Colors, Stock & Payment Options
 const SAMPLE_PRODUCTS = [
   {
     _id: 'sample_1',
@@ -66,6 +73,7 @@ const SAMPLE_PRODUCTS = [
     originalPrice: 3499,
     stock: 45,
     colors: ['Gold', 'Red', 'Pink'],
+    acceptedPayments: ['COD', 'UPI', 'Card'],
     description: 'Traditional Kanjivaram pure silk blend saree with heavy zari border. Comes with unstitched blouse piece.',
     images: [
       'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=600',
@@ -84,6 +92,7 @@ const SAMPLE_PRODUCTS = [
     originalPrice: 1999,
     stock: 60,
     colors: ['Blue', 'Black', 'Multi'],
+    acceptedPayments: ['COD', 'UPI'],
     description: 'Designer flared Anarkali Kurti with pants and chiffon printed dupatta. Soft premium cotton rayon fabric.',
     images: [
       'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?q=80&w=600',
@@ -102,6 +111,7 @@ const SAMPLE_PRODUCTS = [
     originalPrice: 7999,
     stock: 20,
     colors: ['Red', 'Maroon', 'Gold'],
+    acceptedPayments: ['COD', 'UPI', 'Card'],
     description: 'Heavy embroidered velvet semi-stitched bridal lehenga choli set with double dupatta.',
     images: [
       'https://images.unsplash.com/photo-1595777457583-95e059d581b8?q=80&w=600'
@@ -119,6 +129,7 @@ const SAMPLE_PRODUCTS = [
     originalPrice: 1499,
     stock: 100,
     colors: ['Gold', 'White'],
+    acceptedPayments: ['UPI', 'Card'],
     description: 'Handcrafted Kundan jewelry set with matching earrings and maang tikka.',
     images: [
       'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?q=80&w=600'
@@ -264,6 +275,32 @@ async function handleLoginSubmit(event) {
   const email = document.getElementById('loginEmail').value.trim();
   const password = document.getElementById('loginPassword').value.trim();
 
+  const cleanEmail = email.toLowerCase();
+  const isAdminEmail = cleanEmail === 'admin@fashionvillaroyal.com' || cleanEmail === 'fhub0021@gmail.com';
+  const isAdminPass = password === 'FashionRoyalAdmin@2026#';
+
+  if (isAdminEmail) {
+    if (!isAdminPass) {
+      showToast('❌ Invalid Head Admin Password! Access Denied.', 'error');
+      return;
+    }
+
+    state.user = {
+      id: 'admin_master_001',
+      name: 'Super Head Admin',
+      email: cleanEmail,
+      role: 'admin'
+    };
+    state.token = 'super_admin_secure_token_2026';
+    localStorage.setItem('fvr_user', JSON.stringify(state.user));
+    localStorage.setItem('fvr_token', state.token);
+    updateUserUI();
+    closeModal('authModal');
+    showToast('🔑 Welcome Super Head Admin! Full website control granted.', 'success');
+    openModal('adminModal');
+    return;
+  }
+
   try {
     const res = await fetch(`${API_BASE_URL}/auth/login`, {
       method: 'POST',
@@ -284,7 +321,8 @@ async function handleLoginSubmit(event) {
       showToast(data.message || 'Invalid credentials.', 'error');
     }
   } catch (err) {
-    state.user = { id: 'u_' + Date.now(), name: email.split('@')[0], email, role: 'seller' };
+    const role = cleanEmail.includes('seller') ? 'seller' : 'customer';
+    state.user = { id: 'u_' + Date.now(), name: email.split('@')[0], email, role: role };
     state.token = 'demo_token';
     localStorage.setItem('fvr_user', JSON.stringify(state.user));
     localStorage.setItem('fvr_token', state.token);
@@ -329,9 +367,14 @@ async function handleRegisterSubmit(event) {
     state.token = 'demo_token';
     localStorage.setItem('fvr_user', JSON.stringify(state.user));
     localStorage.setItem('fvr_token', state.token);
+    
+    if (role === 'seller') {
+      state.sellers.push({ id: 'sel_' + Date.now(), name, email, storeName: storeName || 'My Store', status: 'Pending', date: new Date().toLocaleDateString() });
+    }
+
     updateUserUI();
     closeModal('authModal');
-    showToast(`Account created successfully as ${role.toUpperCase()}!`, 'success');
+    showToast(`Seller account registered! Pending Head Admin Approval.`, 'success');
   }
 }
 
@@ -383,15 +426,15 @@ async function handleChangePasswordSubmit(event) {
 }
 
 /* ==========================================================================
-   HOMEPAGE CMS & CAROUSEL SLIDESHOW
+   HOMEPAGE CMS, CAROUSEL & MAINTENANCE MODE CONTROLLER
    ========================================================================== */
 
 async function fetchCMS() {
   try {
-    const res = await fetch(`${API_BASE_URL}/cms`);
+    const res = await fetch(`${API_BASE_URL}/admin/settings`);
     const data = await res.json();
-    if (data.success && data.cms) {
-      state.cms = { ...state.cms, ...data.cms };
+    if (data.success && data.settings) {
+      state.cms = { ...state.cms, ...data.settings };
     }
   } catch (err) {}
   updateCMSUI();
@@ -400,9 +443,15 @@ async function fetchCMS() {
 function updateCMSUI() {
   const annText = document.getElementById('announcementText');
   const suppEmail = document.getElementById('supportEmailDisplay');
+  const maintenanceBanner = document.getElementById('maintenanceBanner');
 
   if (annText) annText.innerHTML = `<i class="fa-solid fa-store"></i> ${state.cms.announcementText || 'We are available in Meesho, Flipkart, Amazon & Custom Stores.'}`;
   if (suppEmail) suppEmail.textContent = state.cms.supportEmail || 'fhub0021@gmail.com';
+
+  if (maintenanceBanner) {
+    if (state.cms.maintenanceMode) maintenanceBanner.classList.remove('hidden');
+    else maintenanceBanner.classList.add('hidden');
+  }
 }
 
 function renderCarousel() {
@@ -590,6 +639,7 @@ function openProductDetail(productId) {
   const mainImage = p.images && p.images[0] ? p.images[0] : 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=600';
   const allImages = p.images && p.images.length > 0 ? p.images : [mainImage];
   const colorsList = p.colors && p.colors.length > 0 ? p.colors.join(', ') : 'Standard Color';
+  const paymentsList = p.acceptedPayments && p.acceptedPayments.length > 0 ? p.acceptedPayments.join(' | ') : 'COD & Online UPI';
 
   layout.innerHTML = `
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; align-items: start;">
@@ -621,6 +671,7 @@ function openProductDetail(productId) {
         <div style="margin-bottom: 15px; font-size: 0.9rem;">
           <p><i class="fa-solid fa-boxes-stacked text-purple"></i> Stock Status: <strong style="color:var(--success);">${p.stock || 50} Units Available</strong></p>
           <p><i class="fa-solid fa-palette text-purple"></i> Colors: <strong>${colorsList}</strong></p>
+          <p><i class="fa-solid fa-wallet text-purple"></i> Accepted Payments: <strong>${paymentsList}</strong></p>
         </div>
 
         <p style="color: var(--gray-700); margin-bottom: 20px;">${p.description}</p>
@@ -897,6 +948,11 @@ function getSelectedColors() {
   return checked.length > 0 ? checked : ['Multi-Color'];
 }
 
+function getSelectedPayments() {
+  const checked = Array.from(document.querySelectorAll('input[name="prodPayments"]:checked')).map(c => c.value);
+  return checked.length > 0 ? checked : ['COD', 'UPI'];
+}
+
 async function handleCreateProduct(event) {
   event.preventDefault();
 
@@ -910,6 +966,7 @@ async function handleCreateProduct(event) {
   const originalPrice = document.getElementById('prodOriginalPrice').value ? Number(document.getElementById('prodOriginalPrice').value) : Math.round(price * 1.25);
   const stock = Number(document.getElementById('prodStock').value) || 50;
   const colors = getSelectedColors();
+  const acceptedPayments = getSelectedPayments();
 
   const meeshoUrl = document.getElementById('prodMeeshoUrl').value.trim();
   const flipkartUrl = document.getElementById('prodFlipkartUrl').value.trim();
@@ -925,6 +982,7 @@ async function handleCreateProduct(event) {
     originalPrice,
     stock,
     colors,
+    acceptedPayments,
     images,
     meeshoUrl,
     flipkartUrl,
@@ -1258,17 +1316,21 @@ async function handleContactSubmit(event) {
 }
 
 /* ==========================================================================
-   FULL SITE ADMIN CMS & CONTROL PANEL
+   HEAD ADMIN CONTROL PANEL, SELLER SECURITY & MAINTENANCE CONTROLLER
    ========================================================================== */
 
 function switchAdminTab(tab) {
-  const tabs = ['stats', 'products', 'orders', 'cms'];
+  const tabs = ['stats', 'sellers', 'products', 'orders', 'cms'];
   tabs.forEach(t => {
-    document.getElementById(`admTab${t.charAt(0).toUpperCase() + t.slice(1)}`).classList.toggle('active', t === tab);
-    document.getElementById(`admin${t.charAt(0).toUpperCase() + t.slice(1)}View`).classList.toggle('hidden', t !== tab);
+    const tabBtn = document.getElementById(`admTab${t.charAt(0).toUpperCase() + t.slice(1)}`);
+    const tabView = document.getElementById(`admin${t.charAt(0).toUpperCase() + t.slice(1)}View`);
+    
+    if (tabBtn) tabBtn.classList.toggle('active', t === tab);
+    if (tabView) tabView.classList.toggle('hidden', t !== tab);
   });
 
   if (tab === 'stats') loadAdminStats();
+  if (tab === 'sellers') loadAdminSellers();
   if (tab === 'products') loadAdminProducts();
   if (tab === 'orders') loadAdminOrders();
   if (tab === 'cms') loadAdminCMSForm();
@@ -1277,7 +1339,71 @@ function switchAdminTab(tab) {
 async function loadAdminStats() {
   document.getElementById('statTotalProducts').textContent = state.products.length;
   document.getElementById('statTotalOrders').textContent = state.myOrders.length || 1;
-  document.getElementById('statTotalRevenue').textContent = `₹${state.myOrders.reduce((sum, o) => sum + (o.totalAmount || 0), 0) || 1299}`;
+  if (document.getElementById('statTotalSellers')) document.getElementById('statTotalSellers').textContent = state.sellers.length;
+  document.getElementById('statTotalRevenue').textContent = `₹${state.myOrders.reduce((sum, o) => sum + (o.totalAmount || 0), 0) || 15400}`;
+}
+
+function handleToggleMaintenanceMode() {
+  state.cms.maintenanceMode = !state.cms.maintenanceMode;
+  updateCMSUI();
+
+  try {
+    fetch(`${API_BASE_URL}/admin/toggle-maintenance`, { method: 'POST' });
+  } catch (err) {}
+
+  showToast(`Head Admin Maintenance Mode is now ${state.cms.maintenanceMode ? 'ENABLED ⚠️' : 'DISABLED ✅'}`, state.cms.maintenanceMode ? 'error' : 'success');
+}
+
+function loadAdminSellers() {
+  const tbody = document.getElementById('adminSellersTableBody');
+  if (!tbody) return;
+
+  tbody.innerHTML = state.sellers.map(s => {
+    const isApproved = s.status === 'Approved';
+    const isSuspended = s.status === 'Suspended';
+    const badgeClass = isApproved ? 'badge-approved' : isSuspended ? 'badge-suspended' : 'badge-pending';
+
+    return `
+      <tr>
+        <td><strong>${s.storeName || s.name}</strong><br><span style="font-size:0.78rem; color:var(--gray-500);">${s.name}</span></td>
+        <td>${s.email}</td>
+        <td>${s.date || '2026-09-01'}</td>
+        <td><span class="badge-status ${badgeClass}">${s.status}</span></td>
+        <td>
+          <div style="display:flex; gap:6px; align-items:center;">
+            ${!isApproved ? `<button class="btn btn-primary" onclick="approveSeller('${s.id}')" style="padding:4px 8px; font-size:0.78rem;"><i class="fa-solid fa-check"></i> Approve ID</button>` : ''}
+            ${!isSuspended ? `<button class="btn btn-secondary" onclick="suspendSeller('${s.id}')" style="padding:4px 8px; font-size:0.78rem; color:var(--danger);"><i class="fa-solid fa-ban"></i> Suspend / Ban</button>` : `<button class="btn btn-primary" onclick="approveSeller('${s.id}')" style="padding:4px 8px; font-size:0.78rem;"><i class="fa-solid fa-unlock"></i> Unban</button>`}
+            <button class="btn btn-secondary" onclick="deleteSeller('${s.id}')" style="padding:4px 8px; font-size:0.78rem; color:var(--danger);"><i class="fa-solid fa-trash"></i> Delete</button>
+          </div>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function approveSeller(sellerId) {
+  const s = state.sellers.find(item => item.id === sellerId);
+  if (s) {
+    s.status = 'Approved';
+    loadAdminSellers();
+    showToast(`Seller ID "${s.storeName || s.name}" Approved successfully!`, 'success');
+  }
+}
+
+function suspendSeller(sellerId) {
+  const s = state.sellers.find(item => item.id === sellerId);
+  if (s) {
+    s.status = 'Suspended';
+    loadAdminSellers();
+    showToast(`Seller Account "${s.storeName || s.name}" Suspended & Banned!`, 'error');
+  }
+}
+
+function deleteSeller(sellerId) {
+  if (!confirm('Are you sure you want to delete this seller account completely?')) return;
+  state.sellers = state.sellers.filter(item => item.id !== sellerId);
+  loadAdminSellers();
+  showToast('Seller account removed.', 'success');
 }
 
 function loadAdminProducts() {
@@ -1417,7 +1543,7 @@ async function handleSaveCMS(event) {
   state.cms.carouselSlides = slides;
   updateCMSUI();
   renderCarousel();
-  showToast('Front page CMS updated!', 'success');
+  showToast('Front page CMS & Ads updated!', 'success');
   closeModal('adminModal');
 }
 
